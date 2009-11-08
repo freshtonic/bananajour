@@ -27,8 +27,8 @@ case ARGV.first
 when nil
   pids << Bananajour.serve_web!
   pids << Bananajour.serve_git!
-  pids << Bananajour.advertise!
   pids << Bananajour.eat_me_some_bananas!
+  pids << Bananajour.advertise!
   Process.waitall
 
 when "help", "--help", "-h"

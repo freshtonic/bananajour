@@ -18,6 +18,7 @@ require 'bananajour/version'
 require 'bananajour/bonjour'
 require 'bananajour/helpers'
 require 'bananajour/commands'
+require 'bananajour/eater'
 
 module Bananajour
   

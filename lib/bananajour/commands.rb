@@ -29,6 +29,11 @@ module Bananajour::Commands
     pid
   end
 
+  def eat_me_some_bananas!
+    pid = fork { Bananajour::Eater.new.go! }
+    pid
+  end
+
   def add!(dir, name = nil)
     dir = Fancypath(dir)
 

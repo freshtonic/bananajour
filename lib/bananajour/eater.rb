@@ -5,18 +5,26 @@ class Bananajour::Eater
   def go!
     while true do
       @browser.repositories.each do |remote_repo|
-        # if we have a clone of the repo
-        #   fetch the latest changes
-        # else
-        #   clone it
-        repo = Repository.for_name remote_repo.name
+        local_repo_name = make_local_repo_name(remote_repo)
+        repo = Bananajour::Repository.for_name local_repo_name
         if repo.exists?
-
-        else
-          clone(remote_repo)
+          $stderr.puts "fetching changes from: #{remote_repo.uri} to #{local_repo_name}"
+          `cd #{repo.path} && git fetch --all`
+         else
+          $stderr.puts "cloning remote repo #{remote_repo.uri} to #{local_repo_name}"
+          `cd #{Bananajour.repositories_path} && git clone --bare #{remote_repo.uri} #{local_repo_name}.git`
         end
       end
       sleep 30
     end
+  end
+  private
+  def make_local_repo_name(remote_repo)
+    sanitize_email(remote_repo.person.email) + "" + remote_repo.name
+  end
+  def sanitize_email(email)
+    # we're going to end up using the email address as part of a directory
+    # name, so we better make sure it can be represented on the filesystem.
+    email.gsub(/@/, "_at_").gsub(/\./, "_dot_").gsub(/[^A-Za-z0-9\._-]/, "")
   end
 end
