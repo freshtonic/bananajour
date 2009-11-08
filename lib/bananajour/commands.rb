@@ -5,27 +5,30 @@ module Bananajour::Commands
       abort "You have #{version}, you need at least 1.6"
     end
   end
-  
+
   def check_git_config!
     config_message = lambda {|key, example| "You haven't set your #{key} in your git config yet. To set it: git config --global #{key} '#{example}'"}
     abort(config_message["user.name", "My Name"]) if config.name.empty?
     abort(config_message["user.email", "name@domain.com"]) if config.email.empty?
   end
-  
+
   def serve_web!
-    fork { exec "/usr/bin/env ruby #{File.dirname(__FILE__)}/../../sinatra/app.rb -p #{web_port} -e production" }
+    pid = fork { exec "/usr/bin/env ruby #{File.dirname(__FILE__)}/../../sinatra/app.rb -p #{web_port} -e production" }
     puts "* Started " + web_uri.foreground(:yellow)
+    pid
   end
 
   def serve_git!
-    fork { exec "git daemon --base-path=#{repositories_path} --export-all" }
+    pid = fork { exec "git daemon --base-path=#{repositories_path} --export-all" }
     puts "* Started " + "#{git_uri}".foreground(:yellow)
+    pid
   end
-  
+
   def advertise!
-    fork { Bananajour::Bonjour::Advertiser.new.go! }
+    pid = fork { Bananajour::Bonjour::Advertiser.new.go! }
+    pid
   end
-  
+
   def add!(dir, name = nil)
     dir = Fancypath(dir)
 

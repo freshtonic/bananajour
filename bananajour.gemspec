@@ -6,14 +6,12 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tim Lucas"]
-  s.date = %q{2009-10-17}
-  s.default_executable = %q{bananajour}
+  s.date = %q{2009-11-01}
   s.description = %q{Local git repository hosting with a sexy web interface and bonjour discovery. It's like your own little adhoc, network-aware github!}
   s.email = %q{t.lucas@toolmantim.com}
-  s.executables = ["bananajour"]
+  s.executables = ["bananajour", "bigbananajour"]
   s.extra_rdoc_files = ["Readme.md"]
-  s.files = ["Readme.md", "Rakefile", "bin/bananajour", "lib/bananajour", "lib/bananajour/bonjour", "lib/bananajour/bonjour/advertiser.rb", "lib/bananajour/bonjour/bananajour_browser.rb", "lib/bananajour/bonjour/browser.rb", "lib/bananajour/bonjour/person.rb", "lib/bananajour/bonjour/repository.rb", "lib/bananajour/bonjour/repository_browser.rb", "lib/bananajour/bonjour.rb", "lib/bananajour/commands.rb", "lib/bananajour/gem_dependencies.rb", "lib/bananajour/grit_extensions.rb", "lib/bananajour/helpers.rb", "lib/bananajour/repository.rb", "lib/bananajour/version.rb", "lib/bananajour.rb", "sinatra/app.rb", "sinatra/lib", "sinatra/lib/browsers.rb", "sinatra/lib/diff_helpers.rb", "sinatra/lib/mock_browsers.rb", "sinatra/public", "sinatra/public/jquery-1.3.2.min.js", "sinatra/public/loader.gif", "sinatra/public/logo.png", "sinatra/public/pbjt.swf", "sinatra/public/peanut.png", "sinatra/views", "sinatra/views/commit.haml", "sinatra/views/home.haml", "sinatra/views/layout.haml", "sinatra/views/readme.haml"]
-  s.has_rdoc = false
+  s.files = ["Readme.md", "Rakefile", "bin/bananajour", "bin/bigbananajour", "lib/bananajour", "lib/bananajour/bonjour", "lib/bananajour/bonjour/advertiser.rb", "lib/bananajour/bonjour/bananajour_browser.rb", "lib/bananajour/bonjour/browser.rb", "lib/bananajour/bonjour/person.rb", "lib/bananajour/bonjour/repository.rb", "lib/bananajour/bonjour/repository_browser.rb", "lib/bananajour/bonjour.rb", "lib/bananajour/commands.rb", "lib/bananajour/eater.rb", "lib/bananajour/gem_dependencies.rb", "lib/bananajour/grit_extensions.rb", "lib/bananajour/helpers.rb", "lib/bananajour/repository.rb", "lib/bananajour/version.rb", "lib/bananajour.rb", "sinatra/app.rb", "sinatra/lib", "sinatra/lib/browsers.rb", "sinatra/lib/diff_helpers.rb", "sinatra/lib/mock_browsers.rb", "sinatra/public", "sinatra/public/big-logo.png", "sinatra/public/jquery-1.3.2.min.js", "sinatra/public/loader.gif", "sinatra/public/logo.png", "sinatra/public/pbjt.swf", "sinatra/public/peanut.png", "sinatra/views", "sinatra/views/commit.haml", "sinatra/views/home.haml", "sinatra/views/layout.haml", "sinatra/views/readme.haml"]
   s.homepage = %q{http://github.com/toolmantim/bananajour}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}

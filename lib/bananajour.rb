@@ -26,7 +26,11 @@ module Bananajour
     include DateHelpers
     include GravatarHelpers
     include Commands
-    
+
+    def big?
+      ENV["BIG_BANANA_MODE"] == "true"
+    end
+
     def setup?
       repositories_path.exists?
     end
@@ -40,7 +44,7 @@ module Bananajour
     end
     
     def repositories_path
-      path/"repositories"
+      big? ? path/"mirrored_repositories" : path/"repositories"
     end
 
     def get_git_global_config(key)
@@ -57,13 +61,17 @@ module Bananajour
     end
     
     def web_port
-      9331
+      big? ? 9332 : 9331
     end
     
     def web_uri
       "http://#{host_name}:#{web_port}/"
     end
-    
+
+    def git_port
+      big? ? 9419 : 9418
+    end
+
     def host_name
       hn = get_git_global_config("bananajour.hostname")
       unless hn.nil? or hn.empty?
@@ -84,7 +92,7 @@ module Bananajour
     end
     
     def git_uri
-      "git://#{host_name}/"
+      "git://#{host_name}:#{git_port}/"
     end
 
     def repositories

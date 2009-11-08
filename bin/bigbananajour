@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+ENV["BIG_BANANA_MODE"] = "true"
+
+require "rubygems"
+require (File.symlink?(__FILE__) ? "bananajour" : File.join(File.dirname(__FILE__), "/../lib/bananajour"))
+
+Thread.abort_on_exception = true
+
+Bananajour.setup! if !Bananajour.setup?
+Bananajour.check_git!
+Bananajour.check_git_config!
+
+pids = []
+
+["INT", "TERM", "HUP"].each do |sig|
+  Signal.trap sig do
+    pids.each{|pid| Process.kill "TERM", pid rescue nil}
+    exit 0
+  end
+end
+
+case ARGV.first
+
+when nil
+  pids << Bananajour.serve_web!
+  pids << Bananajour.serve_git!
+  pids << Bananajour.advertise!
+  pids << Bananajour.eat_me_some_bananas!
+  Process.waitall
+
+when "help", "--help", "-h"
+  puts <<-HELP
+Usage: #{File.basename($0)} [<command>]
+
+Commands:
+  none               - Mirror all bananajour repositories and start web, git and bonjour serving
+  help
+  version
+HELP
+
+when "version", "--version", "-v"
+  puts "bananajour version #{Bananajour::VERSION}"
+
+else
+  abort "Say what? Try: #{File.basename($0)} help"
+end

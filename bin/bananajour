@@ -53,7 +53,7 @@ Usage: #{File.basename($0)} [<command>]
 Commands:
   none               - Start the web, git and bonjour serving
   add [path]         - Add an existing git repo to bananajour
-  remove <name>      - Remove a repo 
+  remove <name>      - Remove a repo
   clone <url> [path] - Clone a remote repo and add it to bananajour
   help
   version

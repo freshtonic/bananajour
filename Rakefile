@@ -17,7 +17,7 @@ gem = Gem::Specification.new do |gem|
   gem.files            = %w(Readme.md Rakefile) + Dir.glob("{bin,lib,sinatra}/**/*")
   gem.has_rdoc         = false
   gem.bindir           = 'bin'
-  gem.executables      = [ 'bananajour' ]
+  gem.executables      = [ 'bananajour', 'bigbananajour' ]
   Bananajour::GemDependencies.all.each {|dep| gem.add_runtime_dependency( dep.name, dep.version ) }
 end
 
