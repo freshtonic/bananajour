@@ -7,12 +7,14 @@ class Bananajour::Eater
       @browser.repositories.each do |remote_repo|
         local_repo_name = make_local_repo_name(remote_repo)
         repo = Bananajour::Repository.for_name local_repo_name
-        if repo.exists?
-          $stderr.puts "fetching changes from: #{remote_repo.uri} to #{local_repo_name}"
-          `cd #{repo.path} && git fetch --all`
-         else
-          $stderr.puts "cloning remote repo #{remote_repo.uri} to #{local_repo_name}"
-          `cd #{Bananajour.repositories_path} && git clone --bare #{remote_repo.uri} #{local_repo_name}.git`
+        if !remote_repo.ismirror 
+          if repo.exists?
+            $stderr.puts "fetching changes from: #{remote_repo.uri} to #{local_repo_name}"
+            `cd #{repo.path} && git fetch origin`
+          else
+            $stderr.puts "cloning remote repo #{remote_repo.uri} to #{local_repo_name}"
+            `cd #{Bananajour.repositories_path} && git clone --bare #{remote_repo.uri} #{local_repo_name}.git && cd #{local_repo_name}.git && git remote add origin #{remote_repo.uri}`
+          end
         end
       end
       sleep 30
