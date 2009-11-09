@@ -13,7 +13,7 @@ module Bananajour::Commands
   end
 
   def serve_web!
-    pid = fork { exec "/usr/bin/env ruby #{File.dirname(__FILE__)}/../../sinatra/app.rb -p #{web_port} -e production" }
+    pid = fork { exec "/usr/bin/env ruby #{File.dirname(__FILE__)}/../../#{Bananajour.big? ? "sinatra_big" : "sinatra"}/app.rb -p #{web_port} -e production" }
     puts "* Started " + web_uri.foreground(:yellow)
     pid
   end
