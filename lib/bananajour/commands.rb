@@ -19,7 +19,7 @@ module Bananajour::Commands
   end
 
   def serve_git!
-    pid = fork { exec "git daemon --base-path=#{repositories_path} --export-all" }
+    pid = fork { exec "git daemon --base-path=#{repositories_path} --export-all --port=#{git_port}" }
     puts "* Started " + "#{git_uri}".foreground(:yellow)
     pid
   end
