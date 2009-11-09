@@ -9,6 +9,15 @@ module Bananajour
       "http://gravatar.com/avatar/#{MD5.md5(email)}.png"
     end
   end
+
+  module BigBananajourHelpers
+    def demangle_email(email)
+      email.gsub(/_at_/, "@").gsub(/_dot_/, ".")
+    end
+    def mangle_email(email)
+      email.gsub(/@/, "_at_").gsub(/./, "_dot_")
+    end
+  end
   
   # Lifted from Rails
   module DateHelpers

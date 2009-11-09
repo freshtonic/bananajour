@@ -7,23 +7,10 @@
       a
         :color black
   
-- if @my_repositories.empty?
+- if @repository_names.empty?
 
-  %h2 Add a project
+  %h2 Nothing has been mirrored yet. Watch this space!
   
-  %pre
-    :preserve
-      $ cd ~/code/myproj
-      $ bananajour init
-      #{Bananajour.plain_init_success_message('myproj.git')}
-      $ git push banana master
-      Counting objects: 3, done.
-      Writing objects: 100% (3/3), 229 bytes, done.
-      Total 3 (delta 0), reused 3 (delta 0)
-      Unpacking objects: 100% (3/3), done.
-      To #{Bananajour.repositories_path.expand_path}/myproj.git
-       * [new branch]      master -> master
-
 %style{:type => "text/css"}
   :sass
     .repository
@@ -203,9 +190,19 @@
     .local .repository
       :border-color #980
 
-- for repository in @my_repositories
-  - heads = repository.grit_repo.heads
-  
+- for name in @repository_names
+  .repository
+    %h2
+      &= name
+    %ul.cloners
+      - for email in Bananajour.people_that_have_repository(name)
+        %li
+          = email
+          - repository = Bananajour::Repository.for_name(mangle_email(email) + "/" + name)
+          %p.uri&= repository.uri
+      
+
+-#
   .repository{:id => repository.html_id, 'data-name' => repository.name}
 
     - if repository.readme_file && !local?
@@ -241,7 +238,7 @@
           %li.loading{'data-json-uri' => repo.json_uri}
             %a.name{:href => "#{repo.person.uri}##{repo.html_id}"}= repo.person.name
 
-- if local?
+-# - if local?
   :javascript
     $(function() {
       $("ul.network li").each(function() {
@@ -278,28 +275,3 @@
         });
       });
     });
-  
-  .projects
-    - if @other_repos_by_name.empty?
-      %h2 No other projects
-    - else
-      %h2= pluralize @other_repos_by_name.length, "Other Project", "Other Projects"
-      %ul
-        - for repo_name in @other_repos_by_name.keys.sort
-          %li
-            %h3&= repo_name
-            %ul
-              - for repo in @other_repos_by_name[repo_name].sort_by {|r| r.person.name}
-                %li
-                  %a{:href => repo.web_uri}&= repo.person.name
-  .people
-    - if @people.empty?
-      %h2 No other bananas
-    - else
-      %h2= pluralize @people.length, "Other Banana", "Other Bananas"
-      %ul
-        - for person in @people
-          %li
-            %a{:href => person.uri}
-              %img.gravatar{:src => person.gravatar}
-              %span.name&= person.name

@@ -35,7 +35,11 @@ module Bananajour
       name
     end
     def uri
-      Bananajour.git_uri + dirname
+      if Bananajour.big?
+        Bananajour.git_uri + path.expand_path.to_s.split("/")[-2..-1].join("/")
+      else
+        Bananajour.git_uri + dirname
+      end
     end
     def web_uri
       Bananajour.web_uri + "#" + html_id

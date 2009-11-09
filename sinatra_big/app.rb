@@ -48,25 +48,28 @@ helpers do
   def pluralize(number, singular, plural)
     "#{number} #{number == 1 ? singular : plural}"
   end
+  def mangle_email(email)
+    email.gsub(/@/, "_at_").gsub(/\./, "_dot_")
+  end
 end
 
 get "/" do
-  @my_repositories     = Bananajour.repositories
-  @other_repos_by_name = @repository_browser.other_repositories.group_by {|r| r.name}
-  @people              = @bananajour_browser.other_bananajours
+  @repository_names = Bananajour.repository_names
   haml :home
 end
 
-get "/:repository/readme" do
-  @repository      = Bananajour::Repository.for_name(params[:repository])
+get "/:email/:repository/readme" do
+  mangled_email = mangle_email(params[:email])
+  @repository      = Bananajour::Repository.for_name(mangled_email + "/" + params[:repository])
   readme_file      = @repository.readme_file
   @rendered_readme = @repository.rendered_readme
   @plain_readme    = readme_file.data
   haml :readme
 end
 
-get "/:repository/:commit" do
-  @repository = Bananajour::Repository.for_name(params[:repository])
+get "/:email/:repository/:commit" do
+  mangled_email = mangle_email(params[:email])
+  @repository = Bananajour::Repository.for_name(mangled_email + "/" + params[:repository])
   @commit     = @repository.grit_repo.commit(params[:commit])
   haml :commit
 end
@@ -75,8 +78,9 @@ get "/index.json" do
   json Bananajour.to_hash.to_json
 end
 
-get "/:repository.json" do
-  response = Bananajour::Repository.for_name(params[:repository]).to_hash
+get "/:email/:repository.json" do
+  mangled_email = mangle_email(params[:email])
+  response = Bananajour::Repository.for_name(mangled_email + "/" + params[:repository]).to_hash
   response["recent_commits"].map! { |c| c["committed_date_pretty"] = time_ago_in_words(Time.parse(c["committed_date"])).gsub("about ","") + " ago"; c }
   json response.to_json
 end

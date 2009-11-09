@@ -26,6 +26,7 @@ module Bananajour
 
     include DateHelpers
     include GravatarHelpers
+    include BigBananajourHelpers
     include Commands
 
     def big?
@@ -102,6 +103,14 @@ module Bananajour
       else
         repositories_path.children.map {|r| Repository.new(r)}.sort_by {|r| r.name}
       end
+    end
+
+    def repository_names
+      repositories.map{|r| r.name}.uniq
+    end
+
+    def people_that_have_repository(repository_name)
+      repositories.select{|r| r.name == repository_name}.map{|r| demangle_email(r.path.expand_path.to_s.split("/")[-2]) }.sort
     end
 
     def repository(name)
