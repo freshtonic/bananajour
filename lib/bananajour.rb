@@ -97,9 +97,13 @@ module Bananajour
     end
 
     def repositories
-      repositories_path.children.map {|r| Repository.new(r)}.sort_by {|r| r.name}
+      if Bananajour.big?
+        repositories_path.children.map {|dir| Fancypath(dir).children.map{|r| Repository.new(r)}.sort_by{|r| r.name}}.flatten
+      else
+        repositories_path.children.map {|r| Repository.new(r)}.sort_by {|r| r.name}
+      end
     end
-    
+
     def repository(name)
       repositories.find {|r| r.name == name}
     end
