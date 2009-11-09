@@ -58,29 +58,3 @@ get "/" do
   haml :home
 end
 
-get "/:email/:repository/readme" do
-  mangled_email = mangle_email(params[:email])
-  @repository      = Bananajour::Repository.for_name(mangled_email + "/" + params[:repository])
-  readme_file      = @repository.readme_file
-  @rendered_readme = @repository.rendered_readme
-  @plain_readme    = readme_file.data
-  haml :readme
-end
-
-get "/:email/:repository/:commit" do
-  mangled_email = mangle_email(params[:email])
-  @repository = Bananajour::Repository.for_name(mangled_email + "/" + params[:repository])
-  @commit     = @repository.grit_repo.commit(params[:commit])
-  haml :commit
-end
-
-get "/index.json" do
-  json Bananajour.to_hash.to_json
-end
-
-get "/:email/:repository.json" do
-  mangled_email = mangle_email(params[:email])
-  response = Bananajour::Repository.for_name(mangled_email + "/" + params[:repository]).to_hash
-  response["recent_commits"].map! { |c| c["committed_date_pretty"] = time_ago_in_words(Time.parse(c["committed_date"])).gsub("about ","") + " ago"; c }
-  json response.to_json
-end
